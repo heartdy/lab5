@@ -1,0 +1,77 @@
+using System;
+using System.Windows.Forms;
+
+namespace PokemonSelectorApp
+{
+    public partial class MainForm : Form
+    {
+        // รายชื่อโปเกม่อน
+        private string[] pokemonNames = { "Pikachu", "Charmander", "Squirtle", "Bulbasaur", "Jigglypuff", "Meowth" };
+
+        // รายละเอียดโปเกม่อน
+        private string[] pokemonDetails = {
+            "Electric-type Pokemon", "Fire-type Pokemon", "Water-type Pokemon",
+            "Grass/Poison-type Pokemon", "Normal/Fairy-type Pokemon", "Normal-type Pokemon"
+        };
+
+        // PictureBox สำหรับแสดงรูปโปเกม่อน
+        private PictureBox pokemonPictureBox;
+
+        // Label สำหรับแสดงชื่อโปเกม่อน
+        private Label pokemonLabel;
+
+        public MainForm()
+        {
+            InitializeComponent();
+            InitializePokemonControls();
+        }
+
+        private void InitializePokemonControls()
+        {
+            // สร้าง PictureBox
+            pokemonPictureBox = new PictureBox
+            {
+                Size = new System.Drawing.Size(150, 150),
+                Location = new System.Drawing.Point(50, 100),
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            // สร้าง Label
+            pokemonLabel = new Label
+            {
+                Size = new System.Drawing.Size(150, 30),
+                Location = new System.Drawing.Point(50, 260),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new System.Drawing.Font("Arial", 12, System.Drawing.FontStyle.Bold)
+            };
+
+            // เพิ่ม Controls ลงใน Form
+            Controls.Add(pokemonPictureBox);
+            Controls.Add(pokemonLabel);
+
+            // สร้างปุ่มเลือกโปเกม่อน
+            for (int i = 0; i < pokemonNames.Length; i++)
+            {
+                Button pokemonButton = new Button
+                {
+                    Text = pokemonNames[i],
+                    Size = new System.Drawing.Size(100, 30),
+                    Location = new System.Drawing.Point(50, 30 * i + 30),
+                    Tag = i // ใช้ Tag เพื่อเก็บ index ของโปเกม่อน
+                };
+                pokemonButton.Click += PokemonButton_Click;
+                Controls.Add(pokemonButton);
+            }
+        }
+
+        private void PokemonButton_Click(object sender, EventArgs e)
+        {
+            // ดึง index ของโปเกม่อนจาก Tag
+            int selectedIndex = (int)((Button)sender).Tag;
+
+            // แสดงรูปและชื่อโปเกม่อนที่ถูกเลือก
+            pokemonPictureBox.Image = Properties.Resources.ResourceManager.GetObject(pokemonNames[selectedIndex]) as System.Drawing.Image;
+            pokemonLabel.Text = $"{pokemonNames[selectedIndex]}\n{pokemonDetails[selectedIndex]}";
+        }
+    }
+}
